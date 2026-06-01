@@ -265,15 +265,17 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
               {result.colors.map((c, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
-                  <div style={{
-  width: 48,
-  height: 48,
-  background: toHex(c.rgb),
-  WebkitMaskImage: "url(/yarn.png)",
-  WebkitMaskSize: "cover",
-  maskImage: "url(/yarn.png)",
-  maskSize: "cover",
-}} />
+                  <svg width="48" height="48" viewBox="0 0 48 48">
+  <circle cx="24" cy="24" r="22" fill={toHex(c.rgb)} />
+  <path d="M8 16 Q14 8 24 8 Q34 8 40 16" stroke="rgba(255,255,255,0.5)" strokeWidth="2" fill="none" strokeLinecap="round"/>
+  <path d="M5 24 Q6 14 14 10" stroke="rgba(255,255,255,0.4)" strokeWidth="2" fill="none" strokeLinecap="round"/>
+  <path d="M6 28 Q10 38 20 42" stroke="rgba(255,255,255,0.4)" strokeWidth="2" fill="none" strokeLinecap="round"/>
+  <path d="M24 6 Q36 10 42 22" stroke="rgba(255,255,255,0.4)" strokeWidth="2" fill="none" strokeLinecap="round"/>
+  <path d="M28 42 Q38 36 42 26" stroke="rgba(255,255,255,0.4)" strokeWidth="2" fill="none" strokeLinecap="round"/>
+  <circle cx="24" cy="24" r="8" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5"/>
+  <circle cx="24" cy="24" r="3" fill="rgba(255,255,255,0.7)"/>
+  <circle cx="16" cy="12" r="2" fill="rgba(255,255,255,0.5)"/>
+</svg>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
                   <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
                 </div>
