@@ -266,6 +266,7 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
               {result.colors.map((c, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
                   <div style={{ position: "relative", width: 48, height: 48 }}>
+  <div style={{ position: "relative", width: 48, height: 48 }}>
   <img
     src="/148415.png"
     alt="毛糸"
@@ -274,8 +275,16 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
       height: 48,
       position: "absolute",
       inset: 0,
+      mixBlendMode: "multiply",
     }}
   />
+  <div style={{
+    position: "absolute",
+    inset: 0,
+    background: toHex(c.rgb),
+    borderRadius: "50%",
+    mixBlendMode: "screen",
+  }} />
 </div>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
                   <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
