@@ -285,7 +285,6 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
     borderRadius: "50%",
     mixBlendMode: "screen",
   }} />
-</div>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
                   <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
                 </div>
