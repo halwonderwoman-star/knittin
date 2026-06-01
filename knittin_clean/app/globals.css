@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+:root {
+  --knittin-orange: #FF9900;
+  --knittin-orange-dark: #E68A00;
+  --knittin-orange-light: #FFF3DC;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.app-shell {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* buttons */
+.btn-primary {
+  width: 100%;
+  background: var(--knittin-orange);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:disabled {
+  background: #E0E0E0;
+  color: #AAAAAA;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.btn-secondary {
+  width: 100%;
+  background: transparent;
+  color: #555;
+  border: 1px solid #E0E0E0;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: #f5f5f5; }
+
+/* progress bar */
+.progress-bar {
+  display: flex;
+  border-bottom: 1px solid #F0F0F0;
+  background: #FAFAFA;
+}
+.progress-step {
+  flex: 1;
+  padding: 8px 4px 6px;
+  text-align: center;
+  font-size: 9px;
+  color: #AAAAAA;
+  border-bottom: 2px solid transparent;
+  line-height: 1.3;
+}
+.progress-step.active {
+  color: var(--knittin-orange);
+  border-bottom-color: var(--knittin-orange);
+  font-weight: 600;
+}
+.progress-step.done {
+  color: #CCCCCC;
+  border-bottom-color: #E0E0E0;
+}
+.progress-step .step-num {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 1px;
+}
+
+/* section label */
+.section-label {
+  font-size: 10px;
+  color: #AAAAAA;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* cards */
+.select-card {
+  border: 1px solid #E8E8E8;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #fff;
+}
+.select-card:hover { border-color: var(--knittin-orange); }
+.select-card.selected {
+  border: 2px solid var(--knittin-orange);
+  background: var(--knittin-orange-light);
+}
+
+/* input */
+.input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #E0E0E0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+.input-wrap input {
+  flex: 1;
+  border: none;
+  padding: 10px 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  background: transparent;
+  outline: none;
+  width: 0;
+  -moz-appearance: textfield;
+}
+.input-wrap input::-webkit-outer-spin-button,
+.input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.input-wrap .unit {
+  font-size: 12px;
+  color: #AAAAAA;
+  padding: 0 10px 0 2px;
+  white-space: nowrap;
+}
+
+/* footer nav */
+.footer-nav {
+  padding: 12px 20px 28px;
+  border-top: 1px solid #F0F0F0;
+  background: #fff;
+  flex-shrink: 0;
+  display: grid;
+  gap: 10px;
+}
+.footer-nav.two-col { grid-template-columns: 1fr 1fr; }
+.footer-nav.one-col { grid-template-columns: 1fr; }
+
+/* info note */
+.info-note {
+  background: #FFF8F0;
+  border-left: 3px solid var(--knittin-orange);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* result card */
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.result-box {
+  background: #FAFAFA;
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.result-box .val {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+  line-height: 1;
+}
+.result-box .lbl {
+  font-size: 9px;
+  color: #AAAAAA;
+  margin-top: 3px;
+}
+
+/* lock banner */
+.lock-banner {
+  border: 1px solid #FFD580;
+  background: #FFF8E7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.lock-banner .price { font-size: 16px; font-weight: 700; color: #E68A00; white-space: nowrap; }
