@@ -111,7 +111,7 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
 
   // プレビューcanvasに描画
   const cvs = canvasRef.current!;
-  const containerW = containerRef.current!.clientWidth;
+  const containerW = cvs.parentElement!.clientWidth;
   const cellW = Math.max(2, Math.floor(containerW / totalCols));
   const cellH = Math.max(2, Math.round(cellW * 1.1));
   cvs.width = cellW * totalCols;
