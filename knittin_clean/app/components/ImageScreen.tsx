@@ -265,15 +265,15 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
               {result.colors.map((c, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
-                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-  <circle cx="24" cy="24" r="20" fill={toHex(c.rgb)} />
-  <ellipse cx="24" cy="24" rx="20" ry="8" stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" fill="none"/>
-  <ellipse cx="24" cy="24" rx="8" ry="20" stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" fill="none"/>
-  <path d="M8 18 Q24 12 40 18" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none"/>
-  <path d="M6 24 Q24 18 42 24" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none"/>
-  <path d="M8 30 Q24 24 40 30" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" fill="none"/>
-  <circle cx="32" cy="10" r="3" fill="rgba(255,255,255,0.5)"/>
-</svg>
+                  <div style={{ position: "relative", width: 48, height: 48 }}>
+  <img src="/yarn.png" alt="毛糸" style={{ width: 48, height: 48, opacity: 0.15 }} />
+  <div style={{
+    position: "absolute", inset: 0,
+    borderRadius: "50%",
+    background: toHex(c.rgb),
+    mixBlendMode: "multiply",
+  }} />
+</div>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
                   <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
                 </div>
