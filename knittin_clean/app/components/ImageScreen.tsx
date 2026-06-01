@@ -262,34 +262,34 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
                 {result.colors.length}色
               </span>
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
-              {result.colors.map((c, i) => (
-                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
-                  <div style={{ position: "relative", width: 48, height: 48 }}>
-  <img
-    src="/148415.png"
-    alt="毛糸"
-    style={{
-      width: 48,
-      height: 48,
-      position: "absolute",
-      inset: 0,
-      mixBlendMode: "multiply",
-    }}
-  />
-  <div style={{
-    position: "absolute",
-    inset: 0,
-    background: toHex(c.rgb),
-    borderRadius: "50%",
-    mixBlendMode: "screen",
-  }} />
-                  <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
-                  <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
-                </div>
-              ))}
-            </div>
-
+           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
+  {result.colors.map((c, i) => (
+    <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
+      <div style={{ position: "relative", width: 48, height: 48 }}>
+        <img
+          src="/148415.png"
+          alt="毛糸"
+          style={{
+            width: 48,
+            height: 48,
+            position: "absolute",
+            inset: 0,
+            mixBlendMode: "multiply",
+          }}
+        />
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: toHex(c.rgb),
+          borderRadius: "50%",
+          mixBlendMode: "screen",
+        }} />
+      </div>
+      <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
+      <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
+    </div>
+  ))}
+</div>
             <div style={{ border: "1px solid #F0F0F0", borderRadius: 12, overflow: "hidden", marginBottom: 16 }}>
               <div style={{ background: "#FAFAFA", padding: "8px 14px", borderBottom: "1px solid #F0F0F0", fontSize: 10, fontWeight: 600, color: "#AAAAAA", letterSpacing: "0.04em" }}>合計</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
