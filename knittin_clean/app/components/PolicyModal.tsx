@@ -14,18 +14,19 @@ export default function PolicyModal({ onAgree, onClose }: Props) {
   };
 
   return (
-    <div style={{
-      position: "fixed", inset: 0,
-      background: "rgba(0,0,0,0.5)",
-      display: "flex", alignItems: "flex-end",
-      zIndex: 1000,
-    }}>
-      <div style={{
-        background: "#fff", width: "100%",
-        borderRadius: "20px 20px 0 0",
-        padding: "24px 20px 40px",
-        maxHeight: "80vh", overflowY: "auto",
-      }}>
+   <div style={{
+  position: "fixed", inset: 0,
+  background: "rgba(0,0,0,0.5)",
+  display: "flex", alignItems: "flex-end", justifyContent: "center",
+  zIndex: 1000,
+}}>
+  <div style={{
+    background: "#fff", width: "100%",
+    maxWidth: 430,
+    borderRadius: "20px 20px 0 0",
+    padding: "24px 20px 40px",
+    maxHeight: "80vh", overflowY: "auto",
+  }}>
         <div style={{ width: 40, height: 4, background: "#E0E0E0", borderRadius: 2, margin: "0 auto 20px" }} />
 
         <h3 style={{ fontSize: 16, fontWeight: 700, color: "#222", marginBottom: 4 }}>
