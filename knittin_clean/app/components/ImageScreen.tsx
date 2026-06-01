@@ -267,7 +267,7 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
                   <div style={{ position: "relative", width: 48, height: 48 }}>
   <img
-    src="/yarn.png"
+    src="/148415.png"
     alt="毛糸"
     style={{
       width: 48,
