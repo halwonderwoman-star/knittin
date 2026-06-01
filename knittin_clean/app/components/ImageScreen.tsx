@@ -71,57 +71,121 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
   const processImage = useCallback((src: string) => {
     const img = new Image();
     img.onload = () => {
-      const { totalCols, totalRows } = gauge;
-      const off = document.createElement("canvas");
-      off.width = totalCols; off.height = totalRows;
-      const c = off.getContext("2d")!;
-      c.drawImage(img, 0, 0, totalCols, totalRows);
-      const { data } = c.getImageData(0, 0, totalCols, totalRows);
+  const { totalCols, totalRows } = gauge;
 
-      const k = detectK(data);
-      const centers = quantize(data, k);
-      const counts = new Array(k).fill(0);
+  // 画像の縦横比を保ってグリッドに収める
+  const imgRatio = img.width / img.height;
+  const gridRatio = totalCols / totalRows;
 
-      // draw to preview canvas
-      const cvs = canvasRef.current!;
-      const displayW = cvs.parentElement!.clientWidth;
-      const cellW = Math.max(2, Math.floor(displayW / totalCols));
-      const cellH = Math.max(2, Math.round(cellW * 1.1));
-      cvs.width = displayW;
-      cvs.height = cellH * totalRows;
-      const ctx = cvs.getContext("2d")!;
+  let drawCols: number, drawRows: number, offsetCol: number, offsetRow: number;
 
-      for (let row = 0; row < totalRows; row++) {
-        for (let col = 0; col < totalCols; col++) {
-          const idx = (row * totalCols + col) * 4;
-          const ci = closest(data[idx], data[idx + 1], data[idx + 2], centers);
-          counts[ci]++;
-          const [r, g, b] = centers[ci];
-          ctx.fillStyle = `rgb(${r},${g},${b})`;
-          ctx.fillRect(col * cellW, row * cellH, cellW - 1, cellH - 1);
+  if (imgRatio > gridRatio) {
+    // 画像が横長 → 幅に合わせて高さを縮める
+    drawCols = totalCols;
+    drawRows = Math.round(totalCols / imgRatio);
+    offsetCol = 0;
+    offsetRow = Math.floor((totalRows - drawRows) / 2);
+  } else {
+    // 画像が縦長 → 高さに合わせて幅を縮める
+    drawRows = totalRows;
+    drawCols = Math.round(totalRows * imgRatio);
+    offsetRow = 0;
+    offsetCol = Math.floor((totalCols - drawCols) / 2);
+  }
+
+  // 画像部分をダウンサンプリング
+  const off = document.createElement("canvas");
+  off.width = drawCols; off.height = drawRows;
+  const c = off.getContext("2d")!;
+  c.drawImage(img, 0, 0, drawCols, drawRows);
+  const { data: imgPixels } = c.getImageData(0, 0, drawCols, drawRows);
+
+  // 色抽出は画像部分のみで行う
+  const k = detectK(imgPixels);
+  const centers = quantize(imgPixels, k);
+
+  // デフォルト土台色（白）
+  const bgColor: [number, number, number] = [245, 245, 240];
+
+  const counts = new Array(k + 1).fill(0); // k+1番目が土台色
+
+  // プレビューcanvasに描画
+  const cvs = canvasRef.current!;
+  const containerW = containerRef.current!.clientWidth;
+  const cellW = Math.max(2, Math.floor(containerW / totalCols));
+  const cellH = Math.max(2, Math.round(cellW * 1.1));
+  cvs.width = cellW * totalCols;
+  cvs.height = cellH * totalRows;
+  const ctx = cvs.getContext("2d")!;
+
+  for (let row = 0; row < totalRows; row++) {
+    for (let col = 0; col < totalCols; col++) {
+      const imgRow = row - offsetRow;
+      const imgCol = col - offsetCol;
+
+      let r: number, g: number, b: number;
+      let colorIdx: number;
+
+      if (imgRow >= 0 && imgRow < drawRows && imgCol >= 0 && imgCol < drawCols) {
+        // 画像エリア
+        const idx = (imgRow * drawCols + imgCol) * 4;
+        const alpha = imgPixels[idx + 3];
+        if (alpha < 128) {
+          // 透明部分 → 土台色
+          [r, g, b] = bgColor;
+          colorIdx = k;
+        } else {
+          colorIdx = closest(imgPixels[idx], imgPixels[idx + 1], imgPixels[idx + 2], centers);
+          [r, g, b] = centers[colorIdx];
         }
+      } else {
+        // 余白エリア → 土台色
+        [r, g, b] = bgColor;
+        colorIdx = k;
       }
-      ctx.strokeStyle = "rgba(0,0,0,0.06)"; ctx.lineWidth = 0.5;
-      for (let col = 0; col <= totalCols; col++) { ctx.beginPath(); ctx.moveTo(col * cellW, 0); ctx.lineTo(col * cellW, cvs.height); ctx.stroke(); }
-      for (let row = 0; row <= totalRows; row++) { ctx.beginPath(); ctx.moveTo(0, row * cellH); ctx.lineTo(cvs.width, row * cellH); ctx.stroke(); }
 
-      const totalSt = totalCols * totalRows;
-      const totalMeters = Math.round(totalSt * CM_PER_STITCH / 100);
-      let totalBalls = 0;
+      counts[colorIdx]++;
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(col * cellW, row * cellH, cellW - 1, cellH - 1);
+    }
+  }
 
-      const colors: ColorResult[] = centers
-        .map((c, i) => {
-          const pct = counts[i] / totalSt;
-          const meters = Math.ceil(totalMeters * pct);
-          const balls = Math.ceil(meters / METERS_PER_BALL);
-          totalBalls += balls;
-          return { rgb: c, balls, meters, pct };
-        })
-        .filter(c => c.pct > 0.01)
-        .sort((a, b) => b.pct - a.pct);
+  // グリッド線
+  ctx.strokeStyle = "rgba(0,0,0,0.06)"; ctx.lineWidth = 0.5;
+  for (let col = 0; col <= totalCols; col++) {
+    ctx.beginPath(); ctx.moveTo(col * cellW, 0); ctx.lineTo(col * cellW, cvs.height); ctx.stroke();
+  }
+  for (let row = 0; row <= totalRows; row++) {
+    ctx.beginPath(); ctx.moveTo(0, row * cellH); ctx.lineTo(cvs.width, row * cellH); ctx.stroke();
+  }
 
-      setResult({ colors, totalBalls, totalMeters, imageDataUrl: cvs.toDataURL() });
-    };
+  // 毛糸計算（土台色は別カウント）
+  const totalSt = totalCols * totalRows;
+  const totalMeters = Math.round(totalSt * CM_PER_STITCH / 100);
+  let totalBalls = 0;
+
+  const colors: ColorResult[] = centers
+    .map((c, i) => {
+      const pct = counts[i] / totalSt;
+      const meters = Math.ceil(totalMeters * pct);
+      const balls = Math.ceil(meters / METERS_PER_BALL);
+      totalBalls += balls;
+      return { rgb: c, balls, meters, pct };
+    })
+    .filter(c => c.pct > 0.005)
+    .sort((a, b) => b.pct - a.pct);
+
+  // 土台色も追加
+  const bgPct = counts[k] / totalSt;
+  if (bgPct > 0.005) {
+    const bgMeters = Math.ceil(totalMeters * bgPct);
+    const bgBalls = Math.ceil(bgMeters / METERS_PER_BALL);
+    totalBalls += bgBalls;
+    colors.unshift({ rgb: bgColor, balls: bgBalls, meters: bgMeters, pct: bgPct });
+  }
+
+  setResult({ colors, totalBalls, totalMeters, imageDataUrl: cvs.toDataURL() });
+};
     img.src = src;
   }, [gauge]);
 
