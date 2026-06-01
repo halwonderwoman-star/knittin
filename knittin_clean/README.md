@@ -24,3 +24,4 @@ npm run dev
 - TypeScript
 - Canvas API（画像ビット変換・色抽出）
 - PWA対応（manifest.json）
+- 1
