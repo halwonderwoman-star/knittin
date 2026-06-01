@@ -265,15 +265,15 @@ export default function ImageScreen({ item, gauge, onNext, onBack }: Props) {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
               {result.colors.map((c, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 60 }}>
-                  <div style={{ position: "relative", width: 48, height: 48 }}>
-  <img src="/yarn.png" alt="毛糸" style={{ width: 48, height: 48, opacity: 0.15 }} />
-  <div style={{
-    position: "absolute", inset: 0,
-    borderRadius: "50%",
-    background: toHex(c.rgb),
-    mixBlendMode: "multiply",
-  }} />
-</div>
+                  <div style={{
+  width: 48,
+  height: 48,
+  background: toHex(c.rgb),
+  WebkitMaskImage: "url(/yarn.png)",
+  WebkitMaskSize: "cover",
+  maskImage: "url(/yarn.png)",
+  maskSize: "cover",
+}} />
                   <span style={{ fontSize: 11, fontWeight: 600, color: "#222" }}>{c.balls}玉</span>
                   <span style={{ fontSize: 9, color: "#AAAAAA" }}>{c.meters}m</span>
                 </div>
