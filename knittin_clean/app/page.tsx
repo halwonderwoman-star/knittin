@@ -1,16 +1,22 @@
 "use client";
 import { useState } from "react";
 import LanguageScreen from "./components/LanguageScreen";
-import PolicyScreen from "./components/PolicyScreen";
-import ItemScreen, { ItemConfig } from "./components/ItemScreen";
-import GaugeScreen, { GaugeConfig } from "./components/GaugeScreen";
-import ImageScreen, { ImageResult } from "./components/ImageScreen";
+import RegisterScreen from "./components/RegisterScreen";
+import PolicyModal from "./components/PolicyModal";
+import ItemScreen from "./components/ItemScreen";
+import type { ItemConfig } from "./components/ItemScreen";
+import GaugeScreen from "./components/GaugeScreen";
+import type { GaugeConfig } from "./components/GaugeScreen";
+import ImageScreen from "./components/ImageScreen";
+import type { ImageResult } from "./components/ImageScreen";
 import ResultScreen from "./components/ResultScreen";
 
-type Screen = "lang" | "policy" | "item" | "gauge" | "image" | "result";
+type Screen = "lang" | "register" | "item" | "gauge" | "image" | "result";
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("lang");
+  const [showPolicy, setShowPolicy] = useState(false);
+  const [policyAgreed, setPolicyAgreed] = useState(false);
   const [item, setItem] = useState<ItemConfig | null>(null);
   const [gauge, setGauge] = useState<GaugeConfig | null>(null);
   const [imageResult, setImageResult] = useState<ImageResult | null>(null);
@@ -20,10 +26,23 @@ export default function Home() {
     setScreen("lang");
   };
 
+  const handleRegisterNext = () => {
+    if (!policyAgreed) {
+      setShowPolicy(true);
+    } else {
+      setScreen("item");
+    }
+  };
+
+  const handlePolicyAgree = () => {
+    setPolicyAgreed(true);
+    setShowPolicy(false);
+    setScreen("item");
+  };
+
   return (
     <div className="app-shell">
-      {/* header (main screens only) */}
-      {!["lang", "policy"].includes(screen) && (
+      {!["lang", "register"].includes(screen) && (
         <div style={{ background: "#FF9900", padding: "12px 20px", display: "flex", alignItems: "center", flexShrink: 0 }}>
           <span style={{ fontSize: 18, fontWeight: 800, color: "#fff", letterSpacing: "0.04em" }}>Knittin</span>
           <span style={{ fontSize: 10, color: "rgba(255,255,255,0.75)", letterSpacing: "0.1em", marginLeft: "auto" }}>
@@ -32,12 +51,24 @@ export default function Home() {
         </div>
       )}
 
-      {screen === "lang" && <LanguageScreen onNext={() => setScreen("policy")} />}
-      {screen === "policy" && <PolicyScreen onNext={() => setScreen("item")} onBack={() => setScreen("lang")} />}
+      {showPolicy && (
+        <PolicyModal
+          onAgree={handlePolicyAgree}
+          onClose={() => setShowPolicy(false)}
+        />
+      )}
+
+      {screen === "lang" && <LanguageScreen onNext={() => setScreen("register")} />}
+      {screen === "register" && (
+        <RegisterScreen
+          onNext={handleRegisterNext}
+          onBack={() => setScreen("lang")}
+        />
+      )}
       {screen === "item" && (
         <ItemScreen
           onNext={(config) => { setItem(config); setScreen("gauge"); }}
-          onBack={() => setScreen("policy")}
+          onBack={() => setScreen("register")}
         />
       )}
       {screen === "gauge" && item && (
